@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config(); // Load environment variables from .env file
 const authRoutes = require('./src/api/auth'); // Import auth routes
+const adminRoutes = require('./src/api/admin'); // Import auth routes
+const patientRoutes = require('./src/api/patient'); // Import auth routes
 const { swaggerDocs } = require('./src/config/swaggerConfig'); // Import Swagger configuration
 
 const app = express();
@@ -12,6 +14,8 @@ app.use(bodyParser.json());
 
 // Use authentication routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/patient', patientRoutes);
 
 // Setup Swagger documentation
 swaggerDocs(app, port);
