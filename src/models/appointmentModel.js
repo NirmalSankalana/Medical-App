@@ -22,15 +22,22 @@ exports.countAppointmentsByPatientAndStatus = async (patientId, status) => {
     return snapshot.size;
 };
 
-exports.checkForConflictingAppointments = async (doctorId, date, startTime, endTime) => {
+exports.checkForConflictingAppointments = async (doctorId, date, startTime) => {
     const appointments = await db.collection('appointments')
         .where('doctorId', '==', doctorId)
         .where('date', '==', date)
+        .where('time', '==', startTime)
         .get();
 
     return appointments.docs.some(appointment => {
-        const existingStartTime = new Date(appointment.data().time);
-        const existingEndTime = new Date(appointment.data().endTime);
-        return (startTime < existingEndTime && endTime > existingStartTime);
+        return true;
     });
+};
+
+exports.getAppointmentsByDoctor = async (doctorId) => {
+    const snapshot = await db.collection('appointments')
+        .where('doctorId', '==', doctorId)
+        .orderBy('date', 'desc')
+        .get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };

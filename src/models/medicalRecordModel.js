@@ -25,3 +25,19 @@ exports.getMedicalRecord = async (patientId, filename) => {
     const file = storage.bucket().file(`medicalRecords/${patientId}/${filename}`);
     return file.createReadStream();
 };
+
+exports.checkDoctorPermission = async (patientId, doctorId) => {
+    const permissions = await db.collection('permissions')
+        .where('patientId', '==', patientId)
+        .where('doctorId', '==', doctorId)
+        .get();
+    return !permissions.empty;
+};
+
+exports.getMedicalRecord = async (patientId, filename, doctorId) => {
+    const hasPermission = await this.checkDoctorPermission(patientId, doctorId);
+    if (!hasPermission) return null;
+
+    const file = storage.bucket().file(`medicalRecords/${patientId}/${filename}`);
+    return file.createReadStream();
+};

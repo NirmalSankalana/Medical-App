@@ -24,7 +24,7 @@ exports.bookAppointment = async (patientId, doctorId, date, time) => {
         }
 
         // Check for existing appointments that might conflict
-        const conflicts = await appointmentModel.checkForConflictingAppointments(doctorId, date, appointmentStart, appointmentEnd);
+        const conflicts = await appointmentModel.checkForConflictingAppointments(doctorId, date, appointmentStart);
         if (conflicts) {
             return { error: true, message: 'Time slot is already booked. Please choose another time.' };
         }
