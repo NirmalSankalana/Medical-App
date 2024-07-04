@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config(); // Load environment variables from .env file
 const authRoutes = require('./src/api/auth');
 const adminRoutes = require('./src/api/admin');
@@ -8,7 +9,11 @@ const doctorRoutes = require('./src/api/doctor');
 const { swaggerDocs } = require('./src/config/swaggerConfig'); // Import Swagger configuration
 
 const app = express();
-const port = process.env.PORT || 3000; // Use port from environment variable or default to 3000
+const port = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());

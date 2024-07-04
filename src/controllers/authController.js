@@ -13,11 +13,13 @@ exports.registerPatient = async (req, res) => {
         role: 'patient'
     };
 
+    console.log('patient creating')
+
     const result = await registerUser(userData);
-    if (result.success) {
-        res.status(201).send({ error: false, message: 'Patient registered successfully', data: result.uid });
-    } else {
+    if (result.error) {
         res.status(500).send({ error: true, message: result.message });
+    } else {
+        res.status(201).send({ error: false, message: 'Patient registered successfully', data: result.uid });
     }
 };
 
@@ -43,10 +45,11 @@ exports.registerDoctor = async (req, res) => {
     };
 
     const result = await registerUser(userData);
-    if (result.success) {
-        res.status(201).send({ error: false, message: 'Doctor registered successfully', data: result.uid });
-    } else {
+    if (result.error) {
         res.status(500).send({ error: true, message: result.message });
+        
+    } else {
+        res.status(201).send({ error: false, message: 'Doctor registered successfully', data: result.uid });
     }
 };
 
@@ -54,10 +57,10 @@ exports.registerDoctor = async (req, res) => {
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
     const result = await authenticateUser(email, password);
-    if (result.success) {
-        console.log(result)
-        res.status(200).send({ error: false, data: {token: result.token, role: result.role} });
-    } else {
+    if (result.error) {
         res.status(401).send({ error: true, message: 'Authentication failed' });
+        console.log(result)
+    } else {
+        res.status(200).send({ error: false, data: {token: result.token, role: result.role} });
     }
 };

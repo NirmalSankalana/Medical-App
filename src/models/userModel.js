@@ -6,10 +6,10 @@ const userCollection = db.collection('users');
 exports.createUser = async (userId, userData) => {
     try {
         await userCollection.doc(userId).set(userData);
-        return { success: true, message: 'User created successfully', userId: userId };
+        return { error: false, message: 'User created successfully', userId: userId };
     } catch (error) {
         console.error('Error creating user:', error);
-        return { success: false, message: error.message };
+        return { error: true, message: error.message };
     }
 };
 
@@ -18,12 +18,12 @@ exports.getUserById = async (userId) => {
     try {
         const doc = await userCollection.doc(userId).get();
         if (doc.exists) {
-            return { success: true, data: doc.data() };
+            return { error: false, data: doc.data() };
         }
-        return { success: false, message: 'User not found' };
+        return { error: true, message: 'User not found' };
     } catch (error) {
         console.error('Error getting user:', error);
-        return { success: false, message: error.message };
+        return { error: true, message: error.message };
     }
 };
 

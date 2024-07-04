@@ -22,8 +22,12 @@ const options = {
         servers: [
             {
                 url: URL,
-                description: 'Local server'
+                description: 'Host server'
             },
+            {
+                url: "http://localhost:3000/api",
+                description: 'Local server'
+            }
         ],
     },
     apis: ['./src/api/*.js'], // Path to the API docs
