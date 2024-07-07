@@ -134,6 +134,6 @@ router.post('/register/patient', validateRegistration, authController.registerPa
 router.post('/register/doctor', verifyToken, requireRole('admin'), validateRegistration, authController.registerDoctor);
 
 // User login
-router.post('/login', validateLogin, authController.loginUser);
+router.get('/user/:id', validateLogin, authController.getLoginUser);
 
 module.exports = router;
