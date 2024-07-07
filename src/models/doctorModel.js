@@ -21,7 +21,7 @@ exports.getDoctorById = async (doctorId) => {
 };
 
 exports.getAllDoctors = async ({ page=1, limit=10, name, category }) => {
-    let query = db.collection('users').where('role', '==', role);
+    let query = doctorCollection;
 
     if (name) query = query.where('name', '==', name);
     if (category) query = query.where('title', '==', capitalizeFirstLetter(category));
