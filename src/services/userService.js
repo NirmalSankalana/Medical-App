@@ -50,7 +50,7 @@ exports.authenticateUser = async (email, password) => {
         const userRecord = await admin.auth().getUserByEmail(email);
         const userData = await userModel.getUserById(userRecord.uid);
         const customToken = await admin.auth().createCustomToken(userRecord.uid);
-        return { error: false, token: customToken, role: userData.data.role };
+        return { error: false, token: customToken, role: userData.data.role, email: userData.data.email, firstName: userData.data.firstName };
     } catch (error) {
         console.error('Error authenticating user:', error);
         return { error: true, message: error.message };
