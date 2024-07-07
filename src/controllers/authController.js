@@ -54,13 +54,14 @@ exports.registerDoctor = async (req, res) => {
 };
 
 // Controller for user login
-exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    const result = await authenticateUser(email, password);
+exports.logingetLoginUserUser = async (req, res) => {
+    const { id } = req.params;
+    const result = await getAuthenticateUser(id);
+    console.log(result)
     if (result.error) {
-        res.status(401).send({ error: true, message: 'Authentication failed' });
-        console.log(result)
+        res.status(401).send({ error: true, message: result.message });
+        
     } else {
-        res.status(200).send({ error: false, data: {token: result.token, role: result.role, email: result.email, firstName: result.firstName} });
+        res.status(200).send({ error: false, data: {id: result.id, role: result.role, email: result.email, firstName: result.firstName} });
     }
 };
