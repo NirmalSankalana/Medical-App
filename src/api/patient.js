@@ -9,7 +9,7 @@ router.use(verifyToken, requireRole('patient'));
 
 /**
  * @openapi
- * /patients/doctors:
+ * /patient/doctors:
  *   get:
  *     tags:
  *       - Patients
@@ -36,7 +36,7 @@ router.get('/doctors', patientController.listDoctors);
 
 /**
  * @openapi
- * /patients/appointments/book:
+ * /patient/appointments/book:
  *   post:
  *     tags:
  *       - Patients
