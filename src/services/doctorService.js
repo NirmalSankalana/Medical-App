@@ -11,6 +11,16 @@ exports.fetchAppointments = async (doctorId) => {
     }
 };
 
+exports.getAppointment = async (doctorId, appointmentId) => {
+    try {
+        const appointment = await appointmentModel.getAppointmentByDoctor(doctorId, appointmentId);
+        return { error: false, data: { appointment: appointment } };
+    } catch (error) {
+        console.error('Error cancelling appointment:', error);
+        throw new Error('Service failed to cancel appointment.');
+    }
+};
+
 exports.declineAppointment = async (appointmentId) => {
     try {
         // Update the appointment status to 'declined'

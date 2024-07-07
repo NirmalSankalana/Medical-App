@@ -10,6 +10,20 @@ exports.listAppointments = async (req, res) => {
     }
 };
 
+exports.getAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await doctorService.getAppointment(req.user.uid, id);
+        if (result.error) {
+            throw new Error(result.message);
+        }
+        res.status(201).json({ error: false, data: { message: 'Appointments fecthed successfully', appointmentId: result.id } });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({ error: true, message: error.message || 'Failed to book appointments.' });
+    }
+};
+
 exports.declineAppointment = async (req, res) => {
     const { id } = req.params;
     try {

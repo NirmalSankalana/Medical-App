@@ -2,6 +2,7 @@ const patientService = require('../services/patientService');
 
 exports.listDoctors = async (req, res) => {
     try {
+        console.log("Came 1")
         const doctors = await patientService.listAvailableDoctors();
         res.status(200).json({ error: false, data: doctors });
     } catch (error) {
@@ -21,6 +22,33 @@ exports.bookAppointment = async (req, res) => {
     } catch (error) {
         console.error('Error booking appointment:', error);
         res.status(500).json({ error: true, message: error.message || 'Failed to book appointment.' });
+    }
+};
+
+exports.getAllAppointments = async (req, res) => {
+    try {
+        const result = await patientService.getAllAppointments(req.user.uid);
+        if (result.error) {
+            throw new Error(result.message);
+        }
+        res.status(201).json({ error: false, data: { message: 'Appointments fecthed successfully', appointmentId: result.id } });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({ error: true, message: error.message || 'Failed to book appointments.' });
+    }
+};
+
+exports.getAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await patientService.getAppointment(req.user.uid, id);
+        if (result.error) {
+            throw new Error(result.message);
+        }
+        res.status(201).json({ error: false, data: { message: 'Appointments fecthed successfully', appointmentId: result.id } });
+    } catch (error) {
+        console.error('Error fetching appointment:', error);
+        res.status(500).json({ error: true, message: error.message || 'Failed to book appointments.' });
     }
 };
 

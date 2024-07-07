@@ -327,4 +327,8 @@ router.get('/medical-records', patientController.getMedicalRecords);
  */
 router.get('/medical-records/download', patientController.downloadMedicalRecord);
 
+router.get('/appointments', patientController.getAllAppointments);
+
+router.get('/appointments/:id', patientController.getAppointment);
+
 module.exports = router;
