@@ -1,27 +1,28 @@
 const userModel = require('../models/userModel');
+const doctorModel = require('../models/doctorModel');
 const appointmentModel = require('../models/appointmentModel');
 const medicalRecordModel = require('../models/medicalRecordModel');
 
 exports.listAvailableDoctors = async () => {
     try {
-        return await userModel.getUsersByRole('doctor');
+        return await doctorModel.getAllDoctors();
     } catch (error) {
         console.error('Error fetching doctors:', error);
         throw new Error('Service failed to fetch doctors.');
     }
 };
 
-exports.bookAppointment = async (patientId, doctorId, date, time) => {
+exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
     try {
         // Convert date and time to a JavaScript Date object
         const appointmentStart = new Date(`${date}T${time}`);
-        const appointmentEnd = new Date(appointmentStart.getTime() + 30 * 60000); // Adds 30 minutes
+        const appointmentEnd = new Date(appointmentStart.getTime() + 60 * 60000); // Adds 60 minutes
 
         // Check for valid operation hours: 8 AM to 8 PM, excluding 12 PM to 1 PM
-        const hour = appointmentStart.getHours();
-        if (hour < 8 || hour >= 20 || (hour >= 12 && hour < 13)) {
-            return { error: true, message: 'Invalid appointment time. Please choose a time between 8 AM to 8 PM, excluding 12 PM to 1 PM.' };
-        }
+        // const hour = appointmentStart.getHours();
+        // if (hour < 8 || hour >= 20 || (hour >= 12 && hour < 13)) {
+        //     return { error: true, message: 'Invalid appointment time. Please choose a time between 8 AM to 8 PM, excluding 12 PM to 1 PM.' };
+        // }
 
         // Check for existing appointments that might conflict
         const conflicts = await appointmentModel.checkForConflictingAppointments(doctorId, date, appointmentStart);

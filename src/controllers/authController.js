@@ -61,6 +61,6 @@ exports.loginUser = async (req, res) => {
         res.status(401).send({ error: true, message: 'Authentication failed' });
         console.log(result)
     } else {
-        res.status(200).send({ error: false, data: {token: result.token, role: result.role} });
+        res.status(200).send({ error: false, data: {token: result.token, role: result.role, email: result.email, firstName: result.firstName} });
     }
 };
