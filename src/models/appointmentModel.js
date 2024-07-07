@@ -41,3 +41,33 @@ exports.getAppointmentsByDoctor = async (doctorId) => {
         .get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
+
+exports.getAppointmentsByPatient = async (patientId) => {
+    const snapshot = await db.collection('appointments')
+        .where('patientId', '==', patientId)
+        .orderBy('date', 'desc')
+        .get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+exports.getAppointmentByPatient = async (patientId, appointmentId) => {
+    const appointment = await db.collection('appointments').doc(appointmentId).get()
+    if (appointment) {
+        if (appointment.patientId == patientId){
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+    }
+    return NaN
+    
+};
+
+exports.getAppointmentByDoctor = async (doctorId, appointmentId) => {
+    const appointment = await db.collection('appointments').doc(appointmentId).get()
+    if (appointment) {
+        if (appointment.doctorId == doctorId){
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+    }
+    return NaN
+    
+};

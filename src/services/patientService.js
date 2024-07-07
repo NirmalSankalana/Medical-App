@@ -30,8 +30,10 @@ exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
             return { error: true, message: 'Time slot is already booked. Please choose another time.' };
         }
 
+        let fileName;
+
         try {
-            filePath = await medicalRecordModel.storeMedicalRecord(patientId, file);
+            fileName = await medicalRecordModel.storeMedicalRecord(patientId, file);
         } catch (error) {
             console.error('Error uploading medical record:', error);
             throw new Error('Service failed to upload medical record.');
@@ -45,7 +47,7 @@ exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
             time: appointmentStart.toISOString(),
             endTime: appointmentEnd.toISOString(),
             status: 'pending',
-            filePath: filePath
+            fileName: fileName
         });
 
         return { error: false, data: { appointmentId: appointment.id, status: appointment.status } };
@@ -58,6 +60,26 @@ exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
 exports.cancelAppointment = async (appointmentId) => {
     try {
         await appointmentModel.updateAppointmentStatus(appointmentId, 'cancelled');
+    } catch (error) {
+        console.error('Error cancelling appointment:', error);
+        throw new Error('Service failed to cancel appointment.');
+    }
+};
+
+exports.getAllAppointments = async (patientId) => {
+    try {
+        const appointments = await appointmentModel.getAppointmentsByPatient(patientId);
+        return { error: false, data: { appointments: appointments } };
+    } catch (error) {
+        console.error('Error cancelling appointment:', error);
+        throw new Error('Service failed to cancel appointment.');
+    }
+};
+
+exports.getAppointment = async (patientId, appointmentId) => {
+    try {
+        const appointment = await appointmentModel.getAppointmentByPatient(patientId, appointmentId);
+        return { error: false, data: { appointment: appointment } };
     } catch (error) {
         console.error('Error cancelling appointment:', error);
         throw new Error('Service failed to cancel appointment.');

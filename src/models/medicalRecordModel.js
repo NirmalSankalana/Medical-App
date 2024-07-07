@@ -4,7 +4,7 @@ exports.storeMedicalRecord = async (patientId, file) => {
     const filePath = `medicalRecords/${patientId}/${file.originalname}`;
     const fileRef = storage.bucket().file(filePath);
     await fileRef.save(file.buffer);
-    return await fileRef.getSignedUrl({ action: 'read', expires: '03-09-2491' });
+    return file.originalname;
 };
 
 exports.listMedicalRecords = async (patientId) => {

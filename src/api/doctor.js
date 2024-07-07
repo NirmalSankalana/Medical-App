@@ -91,4 +91,6 @@ router.put('/appointments/decline/:id', doctorController.declineAppointment);
  */
 router.get('/medical-records/:patientId', doctorController.accessMedicalRecords);
 
+router.get('/appointments/:id', patientController.getAppointment);
+
 module.exports = router;
