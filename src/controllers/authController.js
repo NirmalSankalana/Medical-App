@@ -54,7 +54,7 @@ exports.registerDoctor = async (req, res) => {
 };
 
 // Controller for user login
-exports.logingetLoginUserUser = async (req, res) => {
+exports.getLoginUser = async (req, res) => {
     const { id } = req.params;
     const result = await getAuthenticateUser(id);
     console.log(result)

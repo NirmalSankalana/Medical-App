@@ -90,36 +90,6 @@
  *         description: Server error
  */
 
-/**
- * @openapi
- * /auth/login:
- *   post:
- *     tags:
- *       - User Authentication
- *     summary: User login
- *     description: Authenticates a user and returns a token.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Authentication successful
- *       401:
- *         description: Authentication failed
- */
-
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
@@ -134,6 +104,6 @@ router.post('/register/patient', validateRegistration, authController.registerPa
 router.post('/register/doctor', verifyToken, requireRole('admin'), validateRegistration, authController.registerDoctor);
 
 // User login
-router.get('/user/:id', validateLogin, authController.getLoginUser);
+router.get('/user/:id', authController.getLoginUser);
 
 module.exports = router;
