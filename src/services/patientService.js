@@ -30,6 +30,13 @@ exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
             return { error: true, message: 'Time slot is already booked. Please choose another time.' };
         }
 
+        try {
+            filePath = await medicalRecordModel.storeMedicalRecord(patientId, file);
+        } catch (error) {
+            console.error('Error uploading medical record:', error);
+            throw new Error('Service failed to upload medical record.');
+        }
+
         // If no conflicts and valid time, book the appointment
         const appointment = await appointmentModel.createAppointment({
             patientId,
@@ -37,7 +44,8 @@ exports.bookAppointment = async (patientId, doctorId, date, time, file) => {
             date: appointmentStart.toISOString(),
             time: appointmentStart.toISOString(),
             endTime: appointmentEnd.toISOString(),
-            status: 'pending'
+            status: 'pending',
+            filePath: filePath
         });
 
         return { error: false, data: { appointmentId: appointment.id, status: appointment.status } };
