@@ -47,12 +47,33 @@ exports.registerUser = async (userData) => {
 // Authenticate user and get custom token
 exports.authenticateUser = async (email, password) => {
     try {
-        const userRecord = await admin.auth().getUserByEmail(email);
+        // Sign in the user with email and password
+        const userCredential = await admin.auth().signInWithEmailAndPassword(email, password);
+        const userRecord = userCredential.user;
+
+        // Get additional user data from your own database, if necessary
         const userData = await userModel.getUserById(userRecord.uid);
-        const customToken = await admin.auth().createCustomToken(userRecord.uid);
-        return { error: false, token: customToken, role: userData.data.role, id:userRecord.uid, email: userData.data.email, firstName: userData.data.firstName };
+        
+        // Return the relevant user data
+        return {
+            error: false,
+            role: userData.data.role,
+            id: userRecord.uid,
+            email: userData.data.email,
+            firstName: userData.data.firstName
+        };
     } catch (error) {
         console.error('Error authenticating user:', error);
-        return { error: true, message: error.message };
+        // Handling specific errors
+        if (error.code === 'auth/user-not-found') {
+            return { error: true, message: "No user found with this email address." };
+        } else if (error.code === 'auth/wrong-password') {
+            return { error: true, message: "The password is incorrect." };
+        } else if (error.code === 'auth/invalid-email') {
+            return { error: true, message: "The email address is badly formatted." };
+        }
+
+        // General error
+        return { error: true, message: "Authentication failed." };
     }
 };
